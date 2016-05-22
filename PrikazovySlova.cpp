@@ -7,7 +7,7 @@
 using namespace std;
 class PrikazovySlova {
 public:
-    string platnePrikazyy[4] = {"jdi", "pomoc", "vypnout"};
+    string platnePrikazyy[4] = {"jdi", "pomoc", "cist", "vypnout"};
 
     bool jePrikaz(string prikaz) {
         for (int i = 0; i < 4; i++) {

@@ -14,6 +14,8 @@ class Mistnosti
 {
 public:
     Mistnosti(string popis);
+    void pridejAkci(string nazev);
+    void getAkce();
     void pridejVychod(string smer, Mistnosti *mistnost);
     bool overeniPrvku(string smer);
     void uberVychod();

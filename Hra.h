@@ -3,7 +3,6 @@
 //
 
 #include "Prikaz.h"
-#include "Grafika.h"
 #ifndef TEXTOVKA_HRA_H
 #define TEXTOVKA_HRA_H
 class Hra

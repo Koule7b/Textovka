@@ -12,6 +12,9 @@ class Hra {
     CteniPrikazu cteniPrikazu;
 public:
     int splneno = 1;
+    string nazev1;
+    string nazev2;
+    string nazev3;
     Mistnosti *aktualniMistnost;
     Mistnosti *aula = new Mistnosti("Aula");
     Mistnosti *hlavni = new Mistnosti("mise");
@@ -31,7 +34,7 @@ public:
 
     Hra() {
         vytvorDomu();
-
+        knihy();
     }
 
     void mapaDommu()
@@ -127,6 +130,12 @@ public:
             cout << koupe[i] << pokojTvuj[i] << endl;
         }
     }
+    void knihy()
+    {
+        this->nazev1 = "DoctorWho";
+        this->nazev2 = "Zaklinac";
+        this->nazev3 = "PanPrstenu";
+    }
     void uvod() {
         string prikazzz;
         cout << "Hotovo, HEUREKA !" << endl;
@@ -149,27 +158,32 @@ public:
                 cout << endl;
                 cout << endl;
                 cout << endl;
-                cout << "Nebylo by super moc ovlivnit dejny i po jejich ubehnuti ?" << endl;
-                string napis;
-                cin >> napis;
-                if (napis == "ne") {
-                    return;
-                    dohrano = true;
-                } else if (napis == "ano") {
-                    cout << endl;
-                    cout << endl;
-                    cout << endl;
-                    cout << "našel jsi lidi, kteří chtějí tké měnit dějiny.\n"
-                            "Někteří z nich budou kontrolovat změny v událostech" <<endl;
-                    cout << "pro nakres mapky napis 'mapa '" << endl;
-                    cout << "napoveda pokazdy kdyz chces jit jinam napis 'jdi' a smer " << endl;
-                    vypisMoznosti();
-                }
+                rozhodovani1();
             }
         }
         cout << "" << endl;
         cout << "" << endl;
         cout << "" << endl;
+    }
+    void rozhodovani1()
+    {
+        cout << "Nebylo by super moc ovlivnit dejny i po jejich ubehnuti ?" << endl;
+        string napis;
+        cin >> napis;
+        if (napis == "ne") {
+            dohrano = true;
+        } else if (napis == "ano") {
+            cout << endl;
+            cout << endl;
+            cout << endl;
+            cout << "našel jsi lidi, kteří chtějí tké měnit dějiny.\n"
+                    "Někteří z nich budou kontrolovat změny v událostech" <<endl;
+            cout << "Pro cteni napis 'cist' a nazev titulu (lze jen v knihovne)." << endl;
+            cout << "napoveda pokazdy kdyz chces jit jinam napis 'jdi' a smer " << endl;
+            vypisMoznosti();
+        }else{
+            cout << "zkus to znova" << endl;
+        }
     }
 
     void mise() {
@@ -215,6 +229,9 @@ public:
         spolecnaPracovna->pridejVychod("sever", knihovna);
 
         knihovna->pridejVychod("jih",spolecnaPracovna);
+        knihovna->pridejAkci("DoctorWho\n");
+        knihovna->pridejAkci("Zaklinac\n");
+        knihovna->pridejAkci("PanPrstenu\n");
 
         pokoj->pridejVychod("vychod", koupelna);
 
@@ -225,7 +242,6 @@ public:
 
     void hraj() {
         vypisUvitani();
-        bool dohrano = false;
         while (!dohrano) {
             Prikaz *prikaz = cteniPrikazu.getPrikaz();
             dohrano = aktualniPrikaz(*prikaz);
@@ -261,6 +277,8 @@ public:
     void vypisMoznosti() {
         mapaDommu();
         cout << "Ses v " + aktualniMistnost->poppis() << endl;
+        cout << "Akce:" << endl;
+        aktualniMistnost->getAkce();
         cout << "Vychody: ";
         vychody();
 
@@ -272,7 +290,21 @@ public:
         cout << endl;
     }
 
-
+    void cistKnihu(Prikaz &prikaz)
+    {
+        if(nazev1 == prikaz.getDruhySlovo())
+        {
+            cout << "bn sihbiuhersilbiuslhiblhsi";
+        }
+        else if(nazev2 == prikaz.getDruhySlovo())
+        {
+            cout << endl;
+        }
+        else if(nazev3 == prikaz.getDruhySlovo())
+        {
+            cout << "necco";
+        }
+    }
     bool aktualniPrikaz(Prikaz &prikaz) {
         bool chcesUkoncitHru = false;
         if (prikaz.nevimPrikaz()) {
@@ -285,7 +317,9 @@ public:
 
         } else if (prikazovySlovo == "jdi") {
             jdiDoMistnosti(prikaz);
-        } else if (prikazovySlovo == "vypnout") {
+        } else if (prikazovySlovo == "cist"){
+            cistKnihu(prikaz);
+        }else if (prikazovySlovo == "vypnout") {
             chcesUkoncitHru = vypnout(prikaz);
         }
         return chcesUkoncitHru;

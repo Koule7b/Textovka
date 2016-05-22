@@ -12,6 +12,8 @@ class Mistnosti {
     string nazev;
     Mistnosti **vychody;
     string *smeryVychodu;
+    string *akce;
+    int pocetAcke = 0;
     int pocetVychodu = 0;
 
 public:
@@ -19,6 +21,19 @@ public:
         this->popis = popis;
         smeryVychodu = new string[7];
         vychody = new Mistnosti *[6];
+        akce = new string[3];
+    }
+    void pridejAkci(string nazev)
+    {
+        akce[pocetAcke] = nazev;
+        pocetAcke++;
+    }
+
+    void getAkce() {
+        for (int i = 0; i < pocetAcke; i++) {
+            cout << akce[i] << " ";
+        }
+        cout << endl;
     }
 
     void pridejVychod(string smer, Mistnosti *mistnost) {
