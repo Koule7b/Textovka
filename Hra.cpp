@@ -5,6 +5,11 @@
 #include <iostream>
 #include "Mistnosti.cpp"
 #include "CteniPrikazu.cpp"
+#include <fstream>
+#include <cstdio>
+#include <cstdlib>
+
+
 using namespace std;
 
 class Hra {
@@ -28,8 +33,9 @@ public:
     Mistnosti *pracovnaa = new Mistnosti("pracovne.");
     Mistnosti *pokoj = new Mistnosti("ses u sebe v pokoji :-)");
     Mistnosti *koupelna = new Mistnosti("koupelne");
-
-
+    Mistnosti *smer = new Mistnosti("na rozcestniku");
+    Mistnosti *cestaPredDomem = new Mistnosti("pred svym domem");
+    Mistnosti *lesan = new Mistnosti("v lese, ztratil ses");
 
 
     Hra() {
@@ -37,8 +43,7 @@ public:
         knihy();
     }
 
-    void mapaDommu()
-    {
+    void mapaDommu() {
         const char *jidenlna[8];
         const char *WC[8];
         const char *misto[1];
@@ -52,10 +57,9 @@ public:
         jidenlna[0] = "    _ _ _ _ _   ";
         jidenlna[1] = "   |         |  ";
         jidenlna[2] = "   |         |_ ";
-        if(aktualniMistnost == jidelna) {
+        if (aktualniMistnost == jidelna) {
             jidenlna[3] = "   |    x     _ ";
-        }else
-        {
+        } else {
             jidenlna[3] = "   |          _ ";
         }
         jidenlna[4] = "   | jidelna |  ";
@@ -65,23 +69,33 @@ public:
         misto[0] = "                ";
         mistoCesty[0] = "     ";
         WC[0] = "    _ _ _ _ _   ";
-        WC[1] =        "   |         |  ";
-        WC[2] =        "   |         |  ";
-        if(aktualniMistnost == zachod){WC[3] =       "   |    x    |  ";}else{WC[3] =       "   |         |  ";}
-        WC[4] =       "   |   W C   |  ";
-        WC[5] =       "   |_ _   _ _|  ";
-        WC[6] =       "       | |      ";
-        WC[7] =       "       | |      ";
-        for(int i = 0; i < 8; i++)
-        {
+        WC[1] = "   |         |  ";
+        WC[2] = "   |         |  ";
+        if (aktualniMistnost == zachod) { WC[3] = "   |    x    |  "; } else { WC[3] = "   |         |  "; }
+        WC[4] = "   |   W C   |  ";
+        WC[5] = "   |_ _   _ _|  ";
+        WC[6] = "       | |      ";
+        WC[7] = "       | |      ";
+        for (int i = 0; i < 8; i++) {
             //knihy[i] = WC[i];
-            if(i !=4){knihy[i] = WC[i]; koupe[i] = jidenlna[i];}else{knihy[i] = "   |knihovna |  "; koupe[i] = "   |koupelna |  ";}
-            if(i == 3){if(aktualniMistnost == knihovna){knihy[i] = "   |    x    |  ";}else{knihy[i] = "   |         |  ";}if(aktualniMistnost == koupelna){koupe[i] = "   |    x     _ ";}else{koupe[i] = "   |          _ ";}}
+            if (i != 4) {
+                knihy[i] = WC[i];
+                koupe[i] = jidenlna[i];
+            } else {
+                knihy[i] = "   |knihovna |  ";
+                koupe[i] = "   |koupelna |  ";
+            }
+            if (i == 3) {
+                if (aktualniMistnost ==
+                    knihovna) { knihy[i] = "   |    x    |  "; } else { knihy[i] = "   |         |  "; }
+                if (aktualniMistnost ==
+                    koupelna) { koupe[i] = "   |    x     _ "; } else { koupe[i] = "   |          _ "; }
+            }
         }
         obyva[0] = "    _ _| |_ _   ";
         obyva[1] = "   |         |  ";
         obyva[2] = "_ _|         |_ ";
-        if(aktualniMistnost == obyvac){obyva[3] =       "_ _     x     _ ";}else{obyva[3] =       "_ _           _ ";}
+        if (aktualniMistnost == obyvac) { obyva[3] = "_ _     x     _ "; } else { obyva[3] = "_ _           _ "; }
         obyva[4] = "   | obyvak  |  ";
         obyva[5] = "   |_ _   _ _|  ";
         obyva[6] = "       | |      ";
@@ -90,7 +104,8 @@ public:
         spoPrac[1] = "   |         |  ";
         spoPrac[2] = "_ _|spolecna |  ";
         //spoPrac[3] = "_ _     x    |  ";
-        if(aktualniMistnost == spolecnaPracovna){spoPrac[3] = "_ _     x    |  ";}else{spoPrac[3] =       "_ _          |  ";}
+        if (aktualniMistnost ==
+            spolecnaPracovna) { spoPrac[3] = "_ _     x    |  "; } else { spoPrac[3] = "_ _          |  "; }
         spoPrac[4] = "   |pracovna |  ";
         spoPrac[5] = "   |_ _ _ _ _|  ";
         spoPrac[6] = "                ";
@@ -98,7 +113,8 @@ public:
         pracovna[0] = "    _ _| |_ _   ";
         pracovna[1] = "   |         |  ";
         pracovna[2] = "   |         |  ";
-        if(aktualniMistnost == pracovnaa){pracovna[3] =       "   |    x    |  ";}else{pracovna[3] =       "   |         |  ";}
+        if (aktualniMistnost ==
+            pracovnaa) { pracovna[3] = "   |    x    |  "; } else { pracovna[3] = "   |         |  "; }
         pracovna[4] = "   |pracovna |  ";
         pracovna[5] = "   |_ _   _ _|  ";
         pracovna[6] = "       | |      ";
@@ -106,36 +122,109 @@ public:
         pokojTvuj[0] = "    _ _| |_ _   ";
         pokojTvuj[1] = "   |         |  ";
         pokojTvuj[2] = "_ _|         |  ";
-        if(aktualniMistnost == pokoj){pokojTvuj[3] =       "_ _     x    |  ";}else{pokojTvuj[3] =       "_ _          |  ";}
+        if (aktualniMistnost ==
+            pokoj) { pokojTvuj[3] = "_ _     x    |  "; } else { pokojTvuj[3] = "_ _          |  "; }
         pokojTvuj[4] = "   |  pokoj  |  ";
         pokojTvuj[5] = "   |_ _ _ _ _|  ";
         pokojTvuj[6] = "                ";
         pokojTvuj[7] = "                ";
 
-        for(int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
             cout << misto[0] << WC[i] << knihy[i] << endl;
         }
-        for(int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
 
             cout << jidenlna[i] << obyva[i] << spoPrac[i] << endl;
         }
-        for(int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
             cout << misto[0] << pracovna[i] << endl;
         }
-        for(int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
             cout << koupe[i] << pokojTvuj[i] << endl;
         }
     }
-    void knihy()
-    {
-        this->nazev1 = "DoctorWho";
+
+    const char *lees(int i) {
+        if (i % 2) {
+            return "^ ^ ^ ^ ^ ^ ^ ^ ";
+        }
+        else {
+            return " ^ ^ ^ ^ ^ ^ ^ ^";
+        }
+    }
+
+    void mapaOkoli() {
+        const char *les[2];
+        const char *cesta[1];
+        const char *cesta2[1];
+        const char *misto[1];
+        const char *dum[8];
+        const char *smery[8];
+        const char *uDomu[8];
+        cesta[0] = "_ _ _ _ _ _ _ _ ";
+        cesta2[0] = "|";
+        misto[0] = "                ";
+        dum[0] = "    _ _ _ _ _  ^";
+        dum[1] = "   |         |  ";
+        dum[2] = "   |         |_ ";
+        dum[3] = "   |          _ ";
+        dum[4] = "   |  dum    | ^";
+        dum[5] = "   |_ _ _ _ _|  ";
+        dum[6] = "               ^";
+        dum[7] = "                ";
+        smery[0] = " ^ ^ ^ ^ | | ^ ^";
+        smery[1] = "^ ^ ^ ^  | |^ ^ ";
+        smery[2] = "_ _ _ _ _| |_ _ ";
+        if(aktualniMistnost == smer)
+        {
+            smery[3] = "_ _ _ _ _ x _ _ ";
+        }
+        else
+        {
+            smery[3] = "_ _ _ _ _   _ _ ";
+        }
+        smery[4] = " ^ ^ ^ ^ | | ^ ^";
+        smery[5] = "^ ^ ^ ^  | |^ ^ ";
+        smery[6] = " ^ ^ ^ ^ | | ^ ^";
+        smery[7] = "^ ^ ^ ^  | |^ ^ ";
+        for (int i = 0; i < 8; i++) {
+            if (i == 2 || i == 3) {
+                if (i == 3 && aktualniMistnost == cestaPredDomem) {
+                    uDomu[i] = "_ _ _ _ x _ _ _ _";
+                }
+                else {
+                    uDomu[i] = cesta[0];
+                }
+            }
+            else {
+                uDomu[i] = lees(i);
+            }
+        }
+
+        for (int i = 0; i < 8; i++) {
+            les[0] = lees(i);
+            cout << les[0] << les[0] << les[0] << endl;
+        }
+        for (int i = 0; i < 8; i++) {
+            if (i == 2 || i == 3) {
+                les[0] = cesta[0];
+            } else {
+                les[0] = lees(i);
+            }
+            cout << dum[i] << uDomu[i] << smery[i] << endl;
+        }
+        for (int i = 0; i < 8; i++) {
+            les[0] = lees(i);
+            cout << les[0] << les[0] << les[0] << endl;
+        }
+    }
+
+    void knihy() {
+        this->nazev1 = "Strazni";
         this->nazev2 = "Zaklinac";
         this->nazev3 = "PanPrstenu";
     }
+
     void uvod() {
         string prikazzz;
         cout << "Hotovo, HEUREKA !" << endl;
@@ -165,8 +254,8 @@ public:
         cout << "" << endl;
         cout << "" << endl;
     }
-    void rozhodovani1()
-    {
+
+    void rozhodovani1() {
         cout << "Nebylo by super moc ovlivnit dejny i po jejich ubehnuti ?" << endl;
         string napis;
         cin >> napis;
@@ -176,12 +265,21 @@ public:
             cout << endl;
             cout << endl;
             cout << endl;
-            cout << "našel jsi lidi, kteří chtějí tké měnit dějiny.\n"
-                    "Někteří z nich budou kontrolovat změny v událostech" <<endl;
+            cout << "nasel jsi lidi, kteri chtejí take menit dejiny.\n"
+                    "Nekteri z nich budou kontrolovat zmeny v udalostech" << endl;
+            cout << endl;
+            cout << "Pokusili jste se navracení v case do roku '1350'.\n"
+                    "Chybkou pri vypoctu jsi prenesl cely dum, nekam hluboko do lesa.\n"
+                    "Zprvu sis myslel, ze tvuj dom stoji na 'soucasne byvalem lese',\n"
+                    "ale pote co jsi opustil teplo domova jsi zjistil, ze nejsi ani naodou na Zemi.\n"
+                    "V lese si objevil knihu 'Strazci' a rezhodl ses ji prinest do knihovny." << endl;
+            cout << endl;
+            cout << endl;
+            cout << endl;
             cout << "Pro cteni napis 'cist' a nazev titulu (lze jen v knihovne)." << endl;
             cout << "napoveda pokazdy kdyz chces jit jinam napis 'jdi' a smer " << endl;
             vypisMoznosti();
-        }else{
+        } else {
             cout << "zkus to znova" << endl;
         }
     }
@@ -192,13 +290,8 @@ public:
         Mistnosti *personal = new Mistnosti("personal");
         Mistnosti *kuchynee = new Mistnosti("kuchyn");
         Mistnosti *hlavniHala = new Mistnosti("hlani hala");
-        /**
-        Mistnosti * = new Mistnosti();
-        Mistnosti * = new Mistnosti();
-        Mistnosti * = new Mistnosti();
-        Mistnosti * = new Mistnosti();
-        Mistnosti * = new Mistnosti();
-         */
+
+
         jidelna->pridejVychod("vychod", vchod);
         vchod->pridejVychod("zapad", jidelna);
         vchod->pridejVychod("sever", hala);
@@ -223,19 +316,26 @@ public:
         jidelna->pridejVychod("zapad", obyvac);
 
 
-        zachod->pridejVychod("jih",obyvac);
+        zachod->pridejVychod("jih", obyvac);
 
         spolecnaPracovna->pridejVychod("vychod", obyvac);
         spolecnaPracovna->pridejVychod("sever", knihovna);
 
-        knihovna->pridejVychod("jih",spolecnaPracovna);
-        knihovna->pridejAkci("DoctorWho\n");
+        knihovna->pridejVychod("jih", spolecnaPracovna);
+        knihovna->pridejAkci("Strazni\n");
         knihovna->pridejAkci("Zaklinac\n");
         knihovna->pridejAkci("PanPrstenu\n");
 
         pokoj->pridejVychod("vychod", koupelna);
 
         //pracovna.pridejVychod("jih", &pokoj);
+        cestaPredDomem->pridejVychod("domu", spolecnaPracovna);
+        cestaPredDomem->pridejVychod("zapad", smer);
+
+        smer->pridejVychod("vychod", cestaPredDomem);
+        smer->pridejVychod("sever", lesan);
+        smer->pridejVychod("zapad", lesan);
+        smer->pridejVychod("jih", lesan);
 
         aktualniMistnost = knihovna;
     }
@@ -245,7 +345,14 @@ public:
         while (!dohrano) {
             Prikaz *prikaz = cteniPrikazu.getPrikaz();
             dohrano = aktualniPrikaz(*prikaz);
+            if(aktualniMistnost == lesan)
+            {
+                dohrano = true;
+            }
         }
+        cout << "baf" << endl;
+        string slovo;
+        cin >> slovo;
     }
 
     void vypis() {
@@ -277,7 +384,7 @@ public:
     void vypisMoznosti() {
         mapaDommu();
         cout << "Ses v " + aktualniMistnost->poppis() << endl;
-        cout << "Akce:" << endl;
+        cout << "Akce:\n";
         aktualniMistnost->getAkce();
         cout << "Vychody: ";
         vychody();
@@ -290,21 +397,37 @@ public:
         cout << endl;
     }
 
-    void cistKnihu(Prikaz &prikaz)
-    {
-        if(nazev1 == prikaz.getDruhySlovo())
-        {
-            cout << "bn sihbiuhersilbiuslhiblhsi";
+    void cteniZeSouboru(ifstream &soubor) {
+        //cout << (string*)soubor << endl;
+        cout << "precetlo se" << endl;
+    }
+
+    void cistKnihu(Prikaz &prikaz) {
+        if (nazev1 == prikaz.getDruhySlovo()) {
+            ifstream strazni("Strazni.txt");
+            cteniZeSouboru(strazni);
+            cout << "Strazni\n"
+                    "Strazce zalozil brudir jmenem „“. Nechtel dopustit, aby se nekdy\n"
+                    "opakovalo obdobi hladu.Vse zacalo strachem o jidlo. On a jeho\n"
+                    "spolecnici zajistovali zprvu zdroj potravy vybudovanim poli a farem.\n"
+                    "Diky tomuto vseho bylo dostatek. Ne vsem plodinam se vsak darilo vsude stejne.\n"
+                    "Napriklad vzacny 'banasovnik' roste jen u more, kde je pisek, dale pak'hrusbon'\n"
+                    "vyrusta v lesich.Obchod roste vlivem techto podminek. Jen se vyskytl problem\n"
+                    " s prepravou, protoze cesty byly dlouhe, nebezpecne a plne nestvur a lupicu.\n"
+                    "A tak strazni zacali chranit obchodni stezky. Cestu si rozdelili na mensi useky\n"
+                    "a postavili tabory. Kolem taboru slouzili straze a v tabore vybirali penize.\n"
+                    "Za bezpeci kupcum, ktere jim bylo poskytnuto.\n"
+                    "Postupem casu Strazci pronikli i na pole obchodu, hutnictvi,\n"
+                    "vedy a dokonce i vlady. Nutno podotknout, ze svoji praci vykonavali spolehlive.\n";
         }
-        else if(nazev2 == prikaz.getDruhySlovo())
-        {
+        else if (nazev2 == prikaz.getDruhySlovo()) {
             cout << endl;
         }
-        else if(nazev3 == prikaz.getDruhySlovo())
-        {
+        else if (nazev3 == prikaz.getDruhySlovo()) {
             cout << "necco";
         }
     }
+
     bool aktualniPrikaz(Prikaz &prikaz) {
         bool chcesUkoncitHru = false;
         if (prikaz.nevimPrikaz()) {
@@ -317,9 +440,9 @@ public:
 
         } else if (prikazovySlovo == "jdi") {
             jdiDoMistnosti(prikaz);
-        } else if (prikazovySlovo == "cist"){
+        } else if (prikazovySlovo == "cist") {
             cistKnihu(prikaz);
-        }else if (prikazovySlovo == "vypnout") {
+        } else if (prikazovySlovo == "vypnout") {
             chcesUkoncitHru = vypnout(prikaz);
         }
         return chcesUkoncitHru;
@@ -335,7 +458,10 @@ public:
     }
 
     int misee = 1;
-
+    bool dohranoo()
+    {
+        return true;
+    }
     void jdiDoMistnosti(Prikaz &prikaz) {
         /**
         if (aktualniMistnost == hlavni && misee == 1) {
@@ -345,24 +471,31 @@ public:
             this->splneno++;
         }
          */
-
         string rizeni = prikaz.getDruhySlovo();
 
         Mistnosti *dalsiMistnost;
         if (splneno == 1) {
-            spolecnaPracovna->pridejVychod("mise", hala);
+            spolecnaPracovna->pridejVychod("ven", cestaPredDomem);
         }
         if (aktualniMistnost->jeV(rizeni)) {
 
             dalsiMistnost = aktualniMistnost->getVychod(rizeni);
             aktualniMistnost = dalsiMistnost;
-            if(aktualniMistnost == knihovna || aktualniMistnost == spolecnaPracovna || aktualniMistnost == obyvac || aktualniMistnost == zachod || aktualniMistnost == jidelna || aktualniMistnost == pracovnaa || aktualniMistnost == pokoj || aktualniMistnost == koupelna) {
+            if (aktualniMistnost == knihovna || aktualniMistnost == spolecnaPracovna || aktualniMistnost == obyvac ||
+                aktualniMistnost == zachod || aktualniMistnost == jidelna || aktualniMistnost == pracovnaa ||
+                aktualniMistnost == pokoj || aktualniMistnost == koupelna) {
                 mapaDommu();
+            } else {
+                mapaOkoli();
             }
-            cout << "Nachazis se v "+aktualniMistnost->poppis()+"" << endl;
-            cout << "Vychody: ";
-            vychody();
-            cout << endl;
+            cout << "Nachazis se v " + aktualniMistnost->poppis() + "" << endl;
+            if(aktualniMistnost != lesan) {
+                cout << "Akce:\n";
+                aktualniMistnost->getAkce();
+                cout << "Vychody: ";
+                vychody();
+                cout << endl;
+            }
         }
     }
 

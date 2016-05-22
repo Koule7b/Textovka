@@ -5,8 +5,8 @@
 #include <iostream>
 
 
-
 using namespace std;
+
 class Mistnosti {
     string popis;
     string nazev;
@@ -23,15 +23,15 @@ public:
         vychody = new Mistnosti *[6];
         akce = new string[3];
     }
-    void pridejAkci(string nazev)
-    {
+
+    void pridejAkci(string nazev) {
         akce[pocetAcke] = nazev;
         pocetAcke++;
     }
 
     void getAkce() {
         for (int i = 0; i < pocetAcke; i++) {
-            cout << akce[i] << " ";
+            cout << "     "+akce[i];
         }
         cout << endl;
     }
@@ -89,4 +89,15 @@ public:
             }
         }
     }
+/**
+    ~Mistnosti() {
+        for (int i = 0; i < pocetVychodu; i++) {
+            delete[]smeryVychodu[i];
+            delete[]vychody[i];
+        }
+        for (int i = 0; i < pocetAcke; i++) {
+            delete[]akce[i];
+        }
+    }
+    */
 };
