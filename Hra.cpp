@@ -36,6 +36,10 @@ public:
     Mistnosti *smer = new Mistnosti("na rozcestniku");
     Mistnosti *cestaPredDomem = new Mistnosti("pred svym domem");
     Mistnosti *lesan = new Mistnosti("v lese, ztratil ses");
+    Mistnosti *cestaDolu = new Mistnosti("na ceste.");
+    Mistnosti *cestaKHradu = new Mistnosti ("na ceste k hradu.");
+    Mistnosti *kOhnisti = new Mistnosti("na ceste k ohnisti.");
+    Mistnosti *ohnistee = new Mistnosti("u ohniste.");
 
 
     Hra() {
@@ -153,16 +157,129 @@ public:
         }
     }
 
+    void vykresleniMezer(int sirka) {
+        for (int i = 0; i < sirka; i++) {
+            cout << " ";
+        }
+    }
+    void vykresleniStreduHradu(int sirka, int i) {
+        if (i % 2) {
+            if (i == 23) {
+                cout << "___";
+            } else {
+                cout << "__|";
+            }
+            for (int l = 0; l < sirka; l++) {
+                if (l + 1 == sirka) {
+                    cout << "__|_";
+                } else {
+                    cout << "___|";
+                }
+            }
+            //cout<<endl;
+        } else {
+            for (int l = 0; l < sirka; l++) {
+                cout << "___|";
+            }
+            cout << "___";
+            //cout<<endl;
+        }
+    }
+    void vykresleniHrad(int vyska) {
+        for (int i = 0; i < vyska; i++) {
+            cout << lees(i);
+            if (i % 2 == 0) {
+                cout << "|__|___|___|___|___|";
+                if (i <= 2) {
+                    vykresleniMezer(23);
+                    cout << "|__|___|___|___|___|" << lees(i) << endl;
+                } else {
+                    vykresleniStreduHradu(5, i);
+                    cout << "|__|___|___|___|___|" << lees(i) << endl;
+                }
+            } else {
+                cout << "|___|___|___|___|__|";
+                if (i <= 2) {
+                    vykresleniMezer(23);
+                    cout << "|___|___|___|___|__|" << lees(i) << endl;
+                } else {
+                    vykresleniStreduHradu(5, i);
+                    cout << "|___|___|___|___|__|" << lees(i) << endl;
+                }
+            }
+        }
+    }
     void mapaOkoli() {
         const char *les[2];
         const char *cesta[1];
-        const char *cesta2[1];
+        const char *cesta2[8];
         const char *misto[1];
         const char *dum[8];
         const char *smery[8];
         const char *uDomu[8];
+        const char *kHradu[8];
+        const char *cestaKOhnisti[8];
+        const char *ohniste[8];
+        ohniste[0] = "       OOO      ";
+        ohniste[1] = "      O   O     ";
+        ohniste[2] = "_ _ _O     O    ";
+        if(aktualniMistnost == ohnistee) {
+            ohniste[3] = "_ _ _   x  O    ";
+        }else
+        {
+            ohniste[3] = "_ _ _      O    ";
+        }
+        ohniste[4] = "     O     O    ";
+        ohniste[5] = "      O   O     ";
+        ohniste[6] = "       OOO      ";
+        ohniste[7] = lees(7);
+
         cesta[0] = "_ _ _ _ _ _ _ _ ";
-        cesta2[0] = "|";
+        for(int i = 0; i < 8; i++)
+        {
+            if(i == 2)
+            {
+                cestaKOhnisti[i] = cesta[0];
+            }
+            else
+            {
+                cestaKOhnisti[i] = lees(i);
+            }
+        }
+        if(aktualniMistnost == kOhnisti)
+        {
+            cestaKOhnisti[3] = "_ _ _ _ _ x _ _ ";
+        }
+        else
+        {
+            cestaKOhnisti[3] = cesta[0];
+        }cesta2[0] = " ^ ^ ^ ^ | | ^ ^";
+        cesta2[1] = "^ ^ ^ ^ ^| |^ ^ ";
+        cesta2[2] = " ^ ^ ^ ^ | | ^ ^";
+        if(aktualniMistnost == cestaDolu)
+        {
+            cesta2[3] = "^ ^ ^ ^ ^|x|^ ^";
+        }
+        else
+        {
+            cesta2[3] = "^ ^ ^ ^ ^| |^ ^ ";
+        }
+        cesta2[4] = " ^ ^ ^ ^ | | ^ ^";
+        cesta2[5] = "^ ^ ^ ^ ^| |^ ^ ";
+        cesta2[6] = " ^ ^ ^ ^ | | ^ ^";
+        cesta2[7] = "^ ^ ^ ^ ^| |^ ^ ";
+        for (int i = 0; i < 8; i++)
+        {
+            kHradu[i] = cesta2[i];
+            if(aktualniMistnost == cestaKHradu)
+            {
+                kHradu[3] = "^ ^ ^ ^ ^|x|^ ^";
+            }
+            else
+            {
+                kHradu[3] = "^ ^ ^ ^ ^| |^ ^";
+            }
+        }
         misto[0] = "                ";
         dum[0] = "    _ _ _ _ _  ^";
         dum[1] = "   |         |  ";
@@ -173,7 +290,7 @@ public:
         dum[6] = "               ^";
         dum[7] = "                ";
         smery[0] = " ^ ^ ^ ^ | | ^ ^";
-        smery[1] = "^ ^ ^ ^  | |^ ^ ";
+        smery[1] = "^ ^ ^ ^ ^| |^ ^ ";
         smery[2] = "_ _ _ _ _| |_ _ ";
         if(aktualniMistnost == smer)
         {
@@ -184,13 +301,13 @@ public:
             smery[3] = "_ _ _ _ _   _ _ ";
         }
         smery[4] = " ^ ^ ^ ^ | | ^ ^";
-        smery[5] = "^ ^ ^ ^  | |^ ^ ";
+        smery[5] = "^ ^ ^ ^ ^| |^ ^ ";
         smery[6] = " ^ ^ ^ ^ | | ^ ^";
-        smery[7] = "^ ^ ^ ^  | |^ ^ ";
+        smery[7] = "^ ^ ^ ^ ^| |^ ^ ";
         for (int i = 0; i < 8; i++) {
             if (i == 2 || i == 3) {
                 if (i == 3 && aktualniMistnost == cestaPredDomem) {
-                    uDomu[i] = "_ _ _ _ x _ _ _ _";
+                    uDomu[i] = "_ _ _ _ x _ _ _ ";
                 }
                 else {
                     uDomu[i] = cesta[0];
@@ -200,22 +317,18 @@ public:
                 uDomu[i] = lees(i);
             }
         }
-
+        vykresleniHrad(9);
         for (int i = 0; i < 8; i++) {
             les[0] = lees(i);
-            cout << les[0] << les[0] << les[0] << endl;
-        }
-        for (int i = 0; i < 8; i++) {
-            if (i == 2 || i == 3) {
-                les[0] = cesta[0];
-            } else {
-                les[0] = lees(i);
-            }
-            cout << dum[i] << uDomu[i] << smery[i] << endl;
+            cout << les[0] << les[0] << kHradu[i] << les[0] << les[0] << les[0] << endl;
         }
         for (int i = 0; i < 8; i++) {
             les[0] = lees(i);
-            cout << les[0] << les[0] << les[0] << endl;
+            cout << dum[i] << uDomu[i] << smery[i] << cestaKOhnisti[i] << ohniste[i] << les[0] << endl;
+        }
+        for (int i = 0; i < 8; i++) {
+            les[0] = lees(i);
+            cout << les[0] << les[0] << cesta2[i] << les[0] << les[0] << les[0] << endl;
         }
     }
 
@@ -333,11 +446,20 @@ public:
         cestaPredDomem->pridejVychod("zapad", smer);
 
         smer->pridejVychod("vychod", cestaPredDomem);
-        smer->pridejVychod("sever", lesan);
-        smer->pridejVychod("zapad", lesan);
-        smer->pridejVychod("jih", lesan);
+        smer->pridejVychod("sever", cestaKHradu);
+        smer->pridejVychod("zapad", kOhnisti);
+        smer->pridejVychod("jih", cestaDolu);
 
-        aktualniMistnost = knihovna;
+        cestaDolu->pridejVychod("sever", smer);
+
+        cestaKHradu->pridejVychod("jih", smer);
+
+        kOhnisti ->pridejVychod("zapad", ohnistee);
+        kOhnisti->pridejVychod("vychod", smer);
+
+        ohnistee ->pridejVychod("vychod", kOhnisti);
+
+        aktualniMistnost = pokoj;
     }
 
     void hraj() {
