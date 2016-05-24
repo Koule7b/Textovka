@@ -3,40 +3,33 @@
 //
 
 #include <iostream>
+#include "Hra.h"
+#include "Mistnosti.h"
 
 
 using namespace std;
 
-class Mistnosti {
-    string popis;
-    string nazev;
-    Mistnosti **vychody;
-    string *smeryVychodu;
-    string *akce;
-    int pocetAcke = 0;
-    int pocetVychodu = 0;
 
-public:
-    Mistnosti(string popis) {
+    Mistnosti :: Mistnosti(string popis) {
         this->popis = popis;
         smeryVychodu = new string[7];
         vychody = new Mistnosti *[6];
         akce = new string[3];
     }
 
-    void pridejAkci(string nazev) {
+    void Mistnosti :: pridejAkci(string nazev) {
         akce[pocetAcke] = nazev;
         pocetAcke++;
     }
 
-    void getAkce() {
+    void Mistnosti :: getAkce() {
         for (int i = 0; i < pocetAcke; i++) {
             cout << "     "+akce[i];
         }
         cout << endl;
     }
 
-    void pridejVychod(string smer, Mistnosti *mistnost) {
+    void Mistnosti :: pridejVychod(string smer, Mistnosti *mistnost) {
         if (overeniPrvku(smer)) {
             smeryVychodu[pocetVychodu] = smer;
             vychody[pocetVychodu] = mistnost;
@@ -44,7 +37,7 @@ public:
         }
     }
 
-    bool overeniPrvku(string smer) {
+    bool Mistnosti :: overeniPrvku(string smer) {
         bool obsazeno = true;
         for (int i = 0; i < pocetVychodu; i++) {
             if (smeryVychodu[i] == smer) {
@@ -54,7 +47,7 @@ public:
         return obsazeno;
     }
 
-    void uberVychod() {
+    void Mistnosti :: uberVychod() {
         for (int i = 0; i < pocetVychodu; i++) {
             smeryVychodu[i] = smeryVychodu[i + 1];
             vychody[i] = vychody[i + 1];
@@ -63,18 +56,18 @@ public:
     }
 
 
-    string poppis() {
+    string Mistnosti :: poppis() {
         return this->popis;
     }
 
-    void getVychody() {
+    void Mistnosti :: getVychody() {
         for (int i = 0; i < pocetVychodu; i++) {
             cout << smeryVychodu[i] << " ";
         }
         cout << endl;
     }
 
-    Mistnosti *getVychod(string smer) {
+    Mistnosti *Mistnosti :: getVychod(string smer) {
         for (int i = 0; i < 5; i++) {
             if (smeryVychodu[i] == smer) {
                 return vychody[i];
@@ -82,7 +75,7 @@ public:
         }
     }
 
-    bool jeV(string input) {
+    bool Mistnosti :: jeV(string input) {
         for (int i = 0; i < 5; i++) {
             if (smeryVychodu[i] == input) {
                 return true;
@@ -100,4 +93,3 @@ public:
         }
     }
     */
-};

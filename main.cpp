@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "Hra.cpp"
+#include "Hra.h"
 
 
 using namespace std;

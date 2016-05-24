@@ -3,23 +3,16 @@
 //
 
 #include <iostream>
-#include "Mistnosti.cpp"
-#include "CteniPrikazu.cpp"
-#include <fstream>
-#include <cstdio>
-#include <cstdlib>
+#include "Mistnosti.h"
+#include "CteniPrikazu.h"
+#include "Hra.h"
 
 
 using namespace std;
 
-class Hra {
     bool dohrano = false;
     CteniPrikazu cteniPrikazu;
-public:
     int splneno = 1;
-    string nazev1;
-    string nazev2;
-    string nazev3;
     Mistnosti *aktualniMistnost;
     Mistnosti *aula = new Mistnosti("Aula");
     Mistnosti *hlavni = new Mistnosti("mise");
@@ -40,14 +33,16 @@ public:
     Mistnosti *cestaKHradu = new Mistnosti ("na ceste k hradu.");
     Mistnosti *kOhnisti = new Mistnosti("na ceste k ohnisti.");
     Mistnosti *ohnistee = new Mistnosti("u ohniste.");
+    Mistnosti *cestaKZbrani = new Mistnosti("na ceste");
+    Mistnosti *mec = new Mistnosti("na miste, kde doslo k prepadeni.");
 
 
-    Hra() {
+    Hra :: Hra() {
         vytvorDomu();
         knihy();
     }
 
-    void mapaDommu() {
+    void Hra :: mapaDommu() {
         const char *jidenlna[8];
         const char *WC[8];
         const char *misto[1];
@@ -157,12 +152,12 @@ public:
         }
     }
 
-    void vykresleniMezer(int sirka) {
+    void Hra :: vykresleniMezer(int sirka) {
         for (int i = 0; i < sirka; i++) {
             cout << " ";
         }
     }
-    void vykresleniStreduHradu(int sirka, int i) {
+    void Hra :: vykresleniStreduHradu(int sirka, int i) {
         if (i % 2) {
             if (i == 23) {
                 cout << "___";
@@ -185,7 +180,7 @@ public:
             //cout<<endl;
         }
     }
-    void vykresleniHrad(int vyska) {
+    void Hra :: vykresleniHrad(int vyska) {
         for (int i = 0; i < vyska; i++) {
             cout << lees(i);
             if (i % 2 == 0) {
@@ -209,7 +204,7 @@ public:
             }
         }
     }
-    void mapaOkoli() {
+    void Hra :: mapaOkoli() {
         const char *les[2];
         const char *cesta[1];
         const char *cesta2[8];
@@ -220,6 +215,9 @@ public:
         const char *kHradu[8];
         const char *cestaKOhnisti[8];
         const char *ohniste[8];
+        const char *cestaV[8];
+        const char *cestaS[8];
+        const char *mistoPrepadeni[8];
         ohniste[0] = "       OOO      ";
         ohniste[1] = "      O   O     ";
         ohniste[2] = "_ _ _O     O    ";
@@ -304,6 +302,39 @@ public:
         smery[5] = "^ ^ ^ ^ ^| |^ ^ ";
         smery[6] = " ^ ^ ^ ^ | | ^ ^";
         smery[7] = "^ ^ ^ ^ ^| |^ ^ ";
+        for (int j = 0; j < 8; j++)
+        {
+            if(j == 3 ){
+                if(aktualniMistnost == cestaKZbrani) {
+                    cestaV[j] = "^ ^ ^ ^ ^|x|^ ^";
+                }else
+                {
+                    cestaV[j] = "^ ^ ^ ^ ^| |^ ^";
+                }
+            }
+            else
+            {
+                cestaV[j] = cesta2[j];
+            }
+        }
+        mistoPrepadeni[0] = "         | |   ";
+        mistoPrepadeni[1] = "         | |   ";
+        mistoPrepadeni[2] = " _ _ _ _ | | _ ";
+        if(aktualniMistnost == mec) {
+            mistoPrepadeni[3] = "|         x   |";
+        } else
+        {
+            mistoPrepadeni[3] = "|             |";
+        }
+        mistoPrepadeni[4] = "|         H   |";
+        mistoPrepadeni[5] = "|  H          |";
+        mistoPrepadeni[6] = "|    H        |";
+        mistoPrepadeni[7] = "|_ _ _ _ _ _ _|";
+        for (int l = 0; l < 8; ++l)
+        {
+            cestaS[l] = cestaKOhnisti[l];
+            //if(aktualniMistnost)
+        }
         for (int i = 0; i < 8; i++) {
             if (i == 2 || i == 3) {
                 if (i == 3 && aktualniMistnost == cestaPredDomem) {
@@ -330,15 +361,23 @@ public:
             les[0] = lees(i);
             cout << les[0] << les[0] << cesta2[i] << les[0] << les[0] << les[0] << endl;
         }
+        for (int k = 0; k < 8; k++) {
+            les[0] = lees(k);
+            cout << les[0] << les[0] << cestaV[k] << les[0] << les[0] << les[0] << endl;
+        }
+        for (int k = 0; k < 8; k++) {
+            les[0] = lees(k);
+            cout << les[0] << les[0] << mistoPrepadeni[k] << les[0] << les[0] << les[0] << endl;
+        }
     }
 
-    void knihy() {
+    void Hra :: knihy() {
         this->nazev1 = "Strazni";
         this->nazev2 = "Zaklinac";
         this->nazev3 = "PanPrstenu";
     }
 
-    void uvod() {
+    void Hra :: uvod() {
         string prikazzz;
         cout << "Hotovo, HEUREKA !" << endl;
         cout << "Asi jsem prave prisel na to, jak cestovat casoprostorem." << endl;
@@ -368,7 +407,7 @@ public:
         cout << "" << endl;
     }
 
-    void rozhodovani1() {
+    void Hra :: rozhodovani1() {
         cout << "Nebylo by super moc ovlivnit dejny i po jejich ubehnuti ?" << endl;
         string napis;
         cin >> napis;
@@ -411,7 +450,7 @@ public:
         hala->pridejVychod("jih", vchod);
     }
 
-    void vytvorDomu() {
+    void Hra :: vytvorDomu() {
 
         pokoj->pridejVychod("sever", pracovnaa);
         //pokoj->pridejVychod("", koupelna);
@@ -451,6 +490,7 @@ public:
         smer->pridejVychod("jih", cestaDolu);
 
         cestaDolu->pridejVychod("sever", smer);
+        cestaDolu->pridejVychod("jih",cestaKZbrani);
 
         cestaKHradu->pridejVychod("jih", smer);
 
@@ -459,10 +499,15 @@ public:
 
         ohnistee ->pridejVychod("vychod", kOhnisti);
 
+        cestaKZbrani->pridejVychod("sever", cestaDolu);
+        cestaKZbrani->pridejVychod("jih", mec);
+
+        mec->pridejVychod("sever", cestaKZbrani);
+
         aktualniMistnost = pokoj;
     }
 
-    void hraj() {
+    void Hra :: hraj() {
         vypisUvitani();
         while (!dohrano) {
             Prikaz *prikaz = cteniPrikazu.getPrikaz();
@@ -477,7 +522,7 @@ public:
         cin >> slovo;
     }
 
-    void vypis() {
+    void Hra :: vypis() {
         string prikaz;
         string prikazO = "spustit";
         cin >> prikaz;
@@ -490,7 +535,7 @@ public:
         }
     }
 
-    void vypisUvitani() {
+    void Hra :: vypisUvitani() {
         cout << "Z vaseho uctu bylo strzeno 10'000 Korun " << endl;
         cout << endl;
         cout << "Gratuluji k zakoupeni teto hry" << endl;
@@ -503,7 +548,7 @@ public:
     }
 
 
-    void vypisMoznosti() {
+    void Hra :: vypisMoznosti() {
         mapaDommu();
         cout << "Ses v " + aktualniMistnost->poppis() << endl;
         cout << "Akce:\n";
@@ -514,20 +559,13 @@ public:
 
     }
 
-    void vychody() {
+    void Hra :: vychody() {
         aktualniMistnost->getVychody();
         cout << endl;
     }
 
-    void cteniZeSouboru(ifstream &soubor) {
-        //cout << (string*)soubor << endl;
-        cout << "precetlo se" << endl;
-    }
-
-    void cistKnihu(Prikaz &prikaz) {
+    void Hra :: cistKnihu(Prikaz &prikaz) {
         if (nazev1 == prikaz.getDruhySlovo()) {
-            ifstream strazni("Strazni.txt");
-            cteniZeSouboru(strazni);
             cout << "Strazni\n"
                     "Strazce zalozil brudir jmenem „“. Nechtel dopustit, aby se nekdy\n"
                     "opakovalo obdobi hladu.Vse zacalo strachem o jidlo. On a jeho\n"
@@ -550,7 +588,7 @@ public:
         }
     }
 
-    bool aktualniPrikaz(Prikaz &prikaz) {
+    bool Hra :: aktualniPrikaz(Prikaz &prikaz) {
         bool chcesUkoncitHru = false;
         if (prikaz.nevimPrikaz()) {
             cout << "nevim, co myslis, pis znova." << endl;
@@ -570,7 +608,7 @@ public:
         return chcesUkoncitHru;
     }
 
-    void vypisPomoc() {
+    void Hra :: vypisPomoc() {
         mapaDommu();
         cout << aktualniMistnost->poppis() << endl;
         cout << endl;
@@ -579,12 +617,8 @@ public:
         cout << "nezapomen, k jdi pripsat i smer" << endl;
     }
 
-    int misee = 1;
-    bool dohranoo()
-    {
-        return true;
-    }
-    void jdiDoMistnosti(Prikaz &prikaz) {
+
+    void Hra :: jdiDoMistnosti(Prikaz &prikaz) {
         /**
         if (aktualniMistnost == hlavni && misee == 1) {
             mise();
@@ -621,7 +655,7 @@ public:
         }
     }
 
-    bool vypnout(Prikaz &prikaz) {
+    bool Hra :: vypnout(Prikaz &prikaz) {
         if (!prikaz.maDruhySlovo()) {
             cout << "vypnout co ?";
             return false;
@@ -629,4 +663,3 @@ public:
             return true;
         }
     }
-};

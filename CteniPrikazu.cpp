@@ -1,20 +1,20 @@
-//
+#include "PrikazovySlova.h"//
 // Created by Admin on 22.5.2016.
 //
 
-#include "Prikaz.cpp"
+#include "Prikaz.h"
 
 #include <iostream>
+#include "CteniPrikazu.h"
 
-#include "PrikazovySlova.cpp"
 using namespace std;
-class CteniPrikazu {
     PrikazovySlova *prikazy = new PrikazovySlova();
-public:
-    CteniPrikazu() {
+    CteniPrikazu::CteniPrikazu() {
     }
 
-    Prikaz *getPrikaz() {
+
+
+Prikaz* CteniPrikazu::getPrikaz() {
         string slovo1;
         string slovo2;
         cout << "napis prikazy" << endl;
@@ -27,4 +27,3 @@ public:
             return new Prikaz(NULL, slovo2);
         }
     }
-};

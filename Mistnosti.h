@@ -12,6 +12,13 @@ using namespace std;
 
 class Mistnosti
 {
+    string popis;
+    string nazev;
+    Mistnosti **vychody;
+    string *smeryVychodu;
+    string *akce;
+    int pocetAcke = 0;
+    int pocetVychodu = 0;
 public:
     Mistnosti(string popis);
     void pridejAkci(string nazev);

@@ -3,26 +3,23 @@
 //
 
 #include <iostream>
+#include "Prikaz.h"
 
 using namespace std;
-class Prikaz {
-    string prikazovySlovo;
-    string druhySlovo;
-public:
-    Prikaz(string prvniSlovo, string druhySlovo) {
+    Prikaz::Prikaz(string prvniSlovo, string druhySlovo) {
         this->prikazovySlovo = prvniSlovo;
         this->druhySlovo = druhySlovo;
     }
 
-    string getPrikazovySlovo() {
+    string Prikaz::getPrikazovySlovo() {
         return prikazovySlovo;
     }
 
-    string getDruhySlovo() {
+    string Prikaz:: getDruhySlovo() {
         return druhySlovo;
     }
 
-    bool nevimPrikaz() {
+    bool Prikaz::nevimPrikaz() {
         if (prikazovySlovo.empty()) {
             return true;
         } else {
@@ -30,7 +27,6 @@ public:
         }
     }
 
-    bool maDruhySlovo() {
+    bool Prikaz::maDruhySlovo() {
         return (!druhySlovo.empty());
     }
-};

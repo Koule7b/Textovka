@@ -10,7 +10,8 @@ using namespace std;
 #define TEXTOVKA_PRIKAZ_H
 class Prikaz
 {
-    string prvniSlovo, druhySlovo;
+
+    string prikazovySlovo, druhySlovo;
 
 public:
     bool nevimPrikaz();

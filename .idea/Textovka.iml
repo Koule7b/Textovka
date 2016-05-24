@@ -10,7 +10,6 @@
       <sourceFolder url="file://$MODULE_DIR$/Mistnosti.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Prikaz.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Hra.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/PrikazovySlova.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Prikaz.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Mistnosti.cpp" isTestSource="false" />
